@@ -8,6 +8,7 @@ import solver
 from mesh import generate_rect_mesh, make_mesh
 from post_processing import plot_mesh, plot_field, plot_convergence, plot_yplus, plot_line
 
+
 CASE_NAME = "komega_channel"
 
 CASE_DIR = Path(__file__).resolve().parent
@@ -24,8 +25,8 @@ MESH = {
     "params": {
         "length_i": LENGTH,
         "length_j": HEIGHT,
-        "count_i": 5,
-        "count_j": 30,
+        "count_i": 5, # define interior cell count
+        "count_j": 30, # define interior cell count
         "ratio_i": 1.0,
         "ratio_j": 1.03,
     },
@@ -49,7 +50,7 @@ DPDX = -1e-1
 DPDY = 0.0
 
 PHYSICS = {
-    "nu": 1.5e-5,
+    "nu": 1.5e-5, # kinematic viscosity
     "pressure_gradient": (DPDX, DPDY),
 }
 
