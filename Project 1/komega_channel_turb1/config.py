@@ -7,7 +7,7 @@ sys.path.insert(0, str(ROOT_DIR))
 import solver
 from mesh import generate_rect_mesh, make_mesh
 from post_processing import plot_mesh, plot_field, plot_convergence, plot_yplus, plot_line
-
+from visualization.vis_mesh import view_mesh_pyvista
 
 CASE_NAME = "komega_channel"
 
@@ -77,8 +77,6 @@ SOLVER = {
         "n_correctors": 3,
     }
 }
-
-
 
 POST = {
     "plot_interval": 5000,
@@ -175,6 +173,9 @@ if __name__ == "__main__":
         path.mkdir(parents=True, exist_ok=True)
 
     mesh = make_mesh(MESH)
+
+    # view mesh through pyvista
+    view_mesh_pyvista(MESH["path"])
     plot_mesh(MESH_PATH, line_width=0.6, dpi=140)
 
     # ramp initial condition

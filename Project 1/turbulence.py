@@ -2,7 +2,6 @@ import numpy as np
 
 import bc
 
-
 # Model requirements:
 # - k-omega needs k and omega fields, plus nu_t derived from them.
 # - Boundary conditions for k and omega are required at inlets (Dirichlet).
@@ -10,18 +9,30 @@ import bc
 
 
 def _k_omega_defaults():
-    """Return default Wilcox k-omega model parameters."""
-    # Guidance: define the model parameter names used elsewhere and return them.
-    alpha = None
-    beta = None
-    beta_star = None
-    sigma_k = None
-    sigma_omega = None
-    k_min = None
-    omega_min = None
-    nu_t_coeff = None
-    omega_wall_coeff = None
-    raise NotImplementedError
+    """
+    returning k_omega parameter. values are base on lecture slide material
+    """
+    params = {
+        "alpha": 5.0 / 9.0,
+        "beta": 3.0 / 40.0,
+        "beta_star": 0.09,
+
+        # formula is inverse 1/sigma. so 1/0.5
+        "sigma_k": 2.0,
+        "sigma_omega": 2.0,
+
+        # guard lines
+        "k_min": 1.0e-12,
+        "omega_min": 1.0e-12,
+
+        # Eddy viscosity definition: nu_t = nu_t_coeff * k / omega
+        "nu_t_coeff": 1.0,
+
+        # Near wall condition
+        "omega_wall_coeff": 85.0,
+    }
+    return params
+
 
 
 def initialize(fields, mesh, cfg, bc_cfg=None):
@@ -93,7 +104,21 @@ def _apply_komega_wall(fields, mesh, boundary, index_range, nu, params):
     _, _, s = bc._boundary_geometry(mesh, boundary, index_range)
     y = np.abs(s)
     y_safe = np.where(y > 1.0e-12, y, 1.0e-12)
-    raise NotImplementedError
+
+    omega_min = float(params["omega_min"])
+    Cw = float(params["omega_wall_coeff"])
+
+    # omega_wall = Cw * ν / y^2
+    omega_wall = Cw * nu / (y_safe**2)
+    omega_wall = np.maximum(omega_wall, omega_min)
+
+    # set frist real cell next to the wall omega
+    fields["omega"][interior] = omega_wall
+
+    # set ghost cell, omega_wall, k=0
+    bc.set_dirichlet(fields["omega"], mesh, boundary, index_range, omega_wall)
+    bc.set_dirichlet(fields["k"], mesh, boundary, index_range, 0.0)
+
 
 
 def apply_bcs(fields, mesh, bc_cfg, cfg, nu):
@@ -167,8 +192,45 @@ def eddy_viscosity(fields, cfg):
     # - Read k and omega from fields (same ghosted shape as nu_t).
     # - Enforce k_min and omega_min from _k_omega_defaults() before division.
     # - nu_t must be non-negative and stored in fields["nu_t"].
-    raise NotImplementedError
 
+    if "nu_t" not in fields:
+        raise ValueError("fields['nu_t'] is missing.")
+
+    # make nu_t everywhere for laminar
+    if (not cfg.get("enabled", False)) or (cfg.get("model") in (None, "none")):
+        fields["nu_t"][:, :] = 0.0
+        return fields["nu_t"]
+
+    # this is for turbulence
+    model = cfg.get("model")
+    if model not in ("k_omega",):
+        raise NotImplementedError(f"Unknown turbulence model: {model}")
+
+    if "k" not in fields or "omega" not in fields:
+        raise ValueError("fields['k'] and fields['omega'] are missing.")
+
+    # Get all the Params
+    params = _k_omega_defaults()
+    k_min = float(params["k_min"])
+    omega_min = float(params["omega_min"])
+
+    nu_t_coeff = float(params.get("nu_t_coeff", 1.0))
+    k = fields["k"]
+    omega = fields["omega"]
+    nu_t = fields["nu_t"]
+
+    # make sure k and omega never goes negative or zero
+    k_safe = np.maximum(k, k_min)
+    omega_safe = np.maximum(omega, omega_min)
+
+    # nu_t = C * k / omega
+    nu_t[:, :] = nu_t_coeff * (k_safe / omega_safe)
+
+    # Enforce non-negative and finite
+    np.maximum(nu_t, 0.0, out=nu_t)
+    nu_t[~np.isfinite(nu_t)] = 0.0
+
+    return nu_t
 
 def sources(fields, grad_u, grad_v):
     """Compute turbulence source terms for the active model."""
@@ -184,8 +246,43 @@ def sources(fields, grad_u, grad_v):
     # - grad_u/grad_v are interior-only; outputs must be interior-only too.
     # - Use fields["nu_t"][1:-1, 1:-1] for production.
     # - Enforce k_min and omega_min from _k_omega_defaults() before division.
-    raise NotImplementedError
+    params= _k_omega_defaults()
+    alpha = float(params["alpha"])
+    beta = float(params["beta"])
+    beta_star = float(params["beta_star"])
+    k_min = float(params["k_min"])
+    omega_min = float(params["omega_min"])
 
+    # getting rid of ghost cells
+    nu_t = fields["nu_t"][1:-1, 1:-1]
+    k = np.maximum(fields["k"][1:-1, 1:-1], k_min)
+    omega = np.maximum(fields["omega"][1:-1, 1:-1], omega_min)
+
+    du_dx = grad_u[:, :, 0]
+    du_dy = grad_u[:, :, 1]
+    dv_dx = grad_v[:, :, 0]
+    dv_dy = grad_v[:, :, 1]
+
+    # Strain-rate components
+    S11 = du_dx
+    S22 = dv_dy
+    S12 = 0.5 * (du_dy + dv_dx)
+
+    # Invariant SijSij and production Pk = 2*nu_t*SijSij
+    SijSij = S11**2 + S22**2 + 2.0 * (S12**2)
+    Pk = 2.0 * nu_t * SijSij
+    Pk = np.maximum(Pk, 0.0)
+
+    # k equation source: Pk - beta* k*omega
+    source_k = Pk - beta_star * k * omega
+
+    # omega equation source: alpha*(omega/k)*Pk - beta*omega^2
+    source_omega = alpha * (omega / k) * Pk - beta * (omega**2)
+
+    # Defensive cleanup
+    source_k[~np.isfinite(source_k)] = 0.0
+    source_omega[~np.isfinite(source_omega)] = 0.0
+    return source_k, source_omega
 
 def effective_diffusivity(nu, nu_t, field="k"):
     """Return effective diffusivity for k or omega transport."""
@@ -200,4 +297,19 @@ def effective_diffusivity(nu, nu_t, field="k"):
     # Solver-specific requirements:
     # - For "k" use sigma_k, for "omega" use sigma_omega (from _k_omega_defaults()).
     # - Returned array must be compatible with slicing [1:-1, 1:-1].
-    raise NotImplementedError
+
+    params = _k_omega_defaults()
+    if field == "k":
+        sigma = float(params["sigma_k"])
+    elif field in ("omega", "w"):
+        sigma = float(params["sigma_omega"])
+    else:
+        raise ValueError(f"Unknown effective diffusivity field name{field}")
+
+    nu_eff = nu + sigma* nu_t
+
+    # guard-lines, nu_eff always > nu, get rid of Nan values
+    nu_eff = np.maximum(nu_eff, nu)
+    nu_eff[~np.isfinite(nu_eff)] = nu
+
+    return nu_eff

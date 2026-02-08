@@ -1,9 +1,7 @@
 from pathlib import Path
-
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.interpolate as spi
-
 
 def _resolve_mesh_path(mesh_path_or_dir):
     """Resolve a mesh file path from a file or directory."""
