@@ -17,23 +17,21 @@ def _k_omega_defaults():
         "beta": 3.0 / 40.0,
         "beta_star": 0.09,
 
-        # formula is inverse 1/sigma. so 1/0.5
-        "sigma_k": 2.0,
-        "sigma_omega": 2.0,
+        "sigma_k": 0.5,
+        "sigma_omega": 0.5,
 
         # guard lines
-        "k_min": 1.0e-12,
-        "omega_min": 1.0e-12,
+        "k_min": 1.0e-15,
+        "omega_min": 1.0e-6,
 
         # Eddy viscosity definition: nu_t = nu_t_coeff * k / omega
-        "nu_t_coeff": 1.0,
+        "nu_t_coeff": 1,
 
         # Near wall condition
         "omega_wall_coeff": 85.0,
     }
+
     return params
-
-
 
 def initialize(fields, mesh, cfg, bc_cfg=None):
     """Initialize turbulence fields or zero them when disabled."""
@@ -118,8 +116,6 @@ def _apply_komega_wall(fields, mesh, boundary, index_range, nu, params):
     # set ghost cell, omega_wall, k=0
     bc.set_dirichlet(fields["omega"], mesh, boundary, index_range, omega_wall)
     bc.set_dirichlet(fields["k"], mesh, boundary, index_range, 0.0)
-
-
 
 def apply_bcs(fields, mesh, bc_cfg, cfg, nu):
     """Apply turbulence BCs for the active model."""
@@ -214,6 +210,9 @@ def eddy_viscosity(fields, cfg):
     k_min = float(params["k_min"])
     omega_min = float(params["omega_min"])
 
+   # fields["k"][1:-1, 1:-1] = np.maximum(fields["k"][1:-1, 1:-1], 0.0)
+   # fields["omega"][1:-1, 1:-1] = np.maximum(fields["omega"][1:-1, 1:-1], omega_min)
+
     nu_t_coeff = float(params.get("nu_t_coeff", 1.0))
     k = fields["k"]
     omega = fields["omega"]
@@ -306,7 +305,7 @@ def effective_diffusivity(nu, nu_t, field="k"):
     else:
         raise ValueError(f"Unknown effective diffusivity field name{field}")
 
-    nu_eff = nu + sigma* nu_t
+    nu_eff = nu + (1/sigma)* nu_t
 
     # guard-lines, nu_eff always > nu, get rid of Nan values
     nu_eff = np.maximum(nu_eff, nu)

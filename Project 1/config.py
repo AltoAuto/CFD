@@ -33,9 +33,11 @@ TIME = {
     "max_steps": 10000,
 }
 
+DPDX = -1e-1
+
 PHYSICS = {
     "nu": 1.0e-3,
-    "pressure_gradient": (0.0, 0.0),
+    "pressure_gradient": (DPDX, 0.0),
 }
 
 SOLVER = {

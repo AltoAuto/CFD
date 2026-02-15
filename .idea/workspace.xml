@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a50ab9aa-1ad1-469f-8eec-1aae141ae343" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Project 1/validation/check_darcy_friction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/Project 1/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/Project 1/komega_channel_turb1/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/mesh/komega_channel.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/mesh/komega_channel_mesh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_000000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_000000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_000000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_000000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_005000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_005000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_005000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_005000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_010000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_010000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_010000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_010000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_015000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_015000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_015000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_015000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_020000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_020000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_020000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_020000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_025000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_025000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_025000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_025000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_030000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_030000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_030000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_030000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_035000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_035000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_035000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_035000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_040000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_040000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_040000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_040000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_045000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_045000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_045000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_045000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_050000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_050000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_050000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_050000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_055000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_055000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_055000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_055000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_060000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_060000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_060000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_060000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_065000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_065000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_065000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_065000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_070000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_070000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_070000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_070000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_075000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_075000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_075000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_075000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_080000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_080000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_080000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_080000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_085000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_085000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_085000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_085000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_090000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_090000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_090000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_090000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_095000_k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_095000_omega.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_095000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_095000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_100000_p.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_100000_u.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_100000_u_line.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_100000_v.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/fields_100000_yplus_j_min.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/komega_channel_convergence.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/komega_channel_friction.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/komega_channel_friction_log.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/komega_channel_momentum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/postproc/komega_channel_residual_log.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_000000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_005000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_010000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_015000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_020000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_025000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_030000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_035000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_040000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_045000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_050000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_055000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_060000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_065000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_070000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_075000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_080000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_085000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_090000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_095000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/komega_channel_turb1/states/fields_100000.npz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project 1/turbulence.py" beforeDir="false" afterPath="$PROJECT_DIR$/Project 1/turbulence.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;AltoAuto&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/AltoAuto/CFD.git&quot;,
+    &quot;accountId&quot;: &quot;77d3b6b5-94d8-4e1a-b633-82fb7c8546c9&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="39Ejlpc51WQcpMoUJ7Yi6RXS9cN" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Python.check_darcy_friction.executor": "Run",
+    "Python.config.executor": "Run",
+    "Python.turbulence.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/altoa/Desktop/CHT/Project/Project 1/CFD",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "Python"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\altoa\Desktop\CHT\Project\Project 1\CFD\Project 1" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-14705d77f0bb-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.25659.43" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a50ab9aa-1ad1-469f-8eec-1aae141ae343" name="Changes" comment="" />
+      <created>1770268277798</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1770268277798</updated>
+    </task>
+    <servers />
+  </component>
+</project>

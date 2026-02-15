@@ -33,6 +33,8 @@ MESH = {
     "path": MESH_PATH,
 }
 
+# max step -> 100000
+# cfl_diff -> 0.2
 TIME = {
     "cfl": 0.2,
     "cfl_diff":0.2,
@@ -111,7 +113,6 @@ POST = {
     },
 }
 
-
 BOUNDARY = {
     "i_min": {
         "type": "periodic",
@@ -132,6 +133,7 @@ BOUNDARY = {
     "pressure_reference": {"cell": (0, 0), "value": 0.0},
 }
 
+# INITIAL["scalars"] = {"k": 0.1, "omega": 0.1}
 INITIAL = {
     "u": 10.0,
     "v": 0.0,
