@@ -102,15 +102,19 @@ def _apply_komega_wall(fields, mesh, boundary, index_range, nu, params):
     interior, ghost = bc._boundary_indices(boundary, index_range, count_i, count_j)
     _, _, s = bc._boundary_geometry(mesh, boundary, index_range)
 
-    y = np.abs(s)
-    y_safe = np.where(y > 1.0e-12, y, 1.0e-12)
+    if np.ndim(s) > 1 and s.shape[-1] == 2:
+        y = np.linalg.norm(s, axis=-1)
+    else:
+        y = np.abs(s)
+
+    y_safe = np.maximum(y, 1.0e-12)
 
     # Calculate wall omega based on distance
     omega_wall = params["omega_wall_coeff"] * nu / (y_safe ** 2)
     omega_wall = np.maximum(omega_wall, params["omega_min"])
 
     # Overwrite the interior cell values adjacent to the wall
-    #fields["k"][interior] = params["k_min"]
+    fields["k"][interior] = params["k_min"]
     fields["omega"][interior] = omega_wall
 
     # Apply standard Dirichlet mirroring to the ghost cells
@@ -205,7 +209,6 @@ def eddy_viscosity(fields, cfg):
     return fields["nu_t"]
 
 
-'''
 def sources(fields, grad_u, grad_v):
     """Compute turbulence source terms for the active model."""
     # Inputs:
@@ -220,38 +223,6 @@ def sources(fields, grad_u, grad_v):
     # - grad_u/grad_v are interior-only; outputs must be interior-only too.
     # - Use fields["nu_t"][1:-1, 1:-1] for production.
     # - Enforce k_min and omega_min from _k_omega_defaults() before division.
-    params = _k_omega_defaults()
-
-    # Extract interior only
-    k = np.maximum(fields["k"][1:-1, 1:-1], params["k_min"])
-    omega = np.maximum(fields["omega"][1:-1, 1:-1], params["omega_min"])
-    nu_t = fields["nu_t"][1:-1, 1:-1]
-
-    ux = grad_u[..., 0]
-    uy = grad_u[..., 1]
-    vx = grad_v[..., 0]
-    vy = grad_v[..., 1]
-
-    # Strain rate magnitude: 2 * S_ij * S_ij
-    # S_xx = ux, S_yy = vy, S_xy = S_yx = 0.5 * (uy + vx)
-    # 2 * S_ij * S_ij = 2*ux^2 + 2*vy^2 + (uy + vx)^2
-    S2 = 2.0 * ux ** 2 + 2.0 * vy ** 2 + (uy + vx) ** 2
-    P_k = nu_t * S2
-
-    alpha = params["alpha"]
-    beta = params["beta"]
-    beta_star = params["beta_star"]
-
-    # Source equations
-    source_k = P_k - beta_star * k * omega
-    # Numerically safe omega source
-    source_omega = alpha * S2 - beta * omega ** 2
-
-    return source_k, source_omega
-'''
-
-def sources(fields, grad_u, grad_v):
-    """Standard k-omega source terms with gamma (alpha) * (omega/k) * Pk. (Wilcox)"""
     params = _k_omega_defaults()
     k = np.maximum(fields["k"][1:-1, 1:-1], params["k_min"])
     omega = np.maximum(fields["omega"][1:-1, 1:-1], params["omega_min"])
@@ -270,12 +241,14 @@ def sources(fields, grad_u, grad_v):
     # Sk = Pk - beta_star * k * omega
     source_k = P_k - beta_star * k * omega
 
+
     # --- OMEGA-EQUATION SOURCE ---
     # Sw = gamma * (omega / k) * Pk - beta * omega^2
-    term_prod_omega = gamma * (omega / k) * P_k
-    term_diss_omega = beta * (omega ** 2)
+    #source_omega = gamma * (omega / k) * P_k - beta * (omega ** 2)
 
-    source_omega = term_prod_omega - term_diss_omega
+    # --- OMEGA-EQUATION SOURCE (Stable Form) ---
+    # Sw = gamma * S^2 - beta * omega^2
+    source_omega = gamma * S2 - beta * (omega ** 2)
 
     return source_k, source_omega
 

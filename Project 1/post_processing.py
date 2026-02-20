@@ -1,7 +1,9 @@
 from pathlib import Path
+
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.interpolate as spi
+
 
 def _resolve_mesh_path(mesh_path_or_dir):
     """Resolve a mesh file path from a file or directory."""
@@ -599,9 +601,13 @@ def friction_coefficient_array(
     """Compute skin-friction coefficient from in-memory fields."""
     if u_ref is None:
         if flow_axis == "i":
-            u_ref = float(np.mean(fields["u"][1:-1, 1:-1]))
+            u_field = fields["u"][1:-1, 1:-1]
         else:
-            u_ref = float(np.mean(fields["v"][1:-1, 1:-1]))
+            u_field = fields["v"][1:-1, 1:-1]
+        volume = np.asarray(mesh["cell_volume"])
+        if volume.shape != u_field.shape:
+            raise ValueError("cell_volume shape does not match velocity field.")
+        u_ref = float(np.sum(u_field * volume) / np.sum(volume))
     if u_ref == 0.0 or not np.isfinite(u_ref):
         raise ValueError("u_ref must be nonzero for friction coefficient.")
 

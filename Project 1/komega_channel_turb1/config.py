@@ -8,7 +8,6 @@ import solver
 from mesh import generate_rect_mesh, make_mesh
 from post_processing import plot_mesh, plot_field, plot_convergence, plot_yplus, plot_line
 from visualization.vis_mesh import view_mesh_pyvista
-
 CASE_NAME = "komega_channel"
 
 CASE_DIR = Path(__file__).resolve().parent
@@ -20,13 +19,25 @@ MESH_PATH = MESH_DIR / f"{CASE_NAME}.npz"
 LENGTH = 0.02
 HEIGHT = 0.05
 
+#-------------------------
+# Re = 8158 -> DPDX = 0.04
+#-------------------------
+DPDX = -0.057
+DPDY = 0
+nu = 1.5e-5
+
+PHYSICS = {
+    "nu": nu, # kinematic viscosity
+    "pressure_gradient": (DPDX, DPDY),
+}
+
 MESH = {
     "generator": generate_rect_mesh,
     "params": {
         "length_i": LENGTH,
         "length_j": HEIGHT,
-        "count_i": 5, # define interior cell count
-        "count_j": 30, # define interior cell count
+        "count_i": 5,
+        "count_j": 30,
         "ratio_i": 1.0,
         "ratio_j": 1.03,
     },
@@ -38,25 +49,14 @@ MESH = {
 TIME = {
     "cfl": 0.5,
     "cfl_diff":0.5,
-    "dt_max":0.1, #5e-1
+    "dt_max":0.1,
     "dt_min": 0.0,
-    "max_steps":70000,
+    "max_steps":80000,
 }
 
 RESTART = {
     "enabled": False,
     "step": 1145,
-}
-
-#-------------------------
-# Re = 8158 -> DPDX = 0.04
-#-------------------------
-DPDX = -0.057
-DPDY = 0.0
-
-PHYSICS = {
-    "nu": 1.5e-5, # kinematic viscosity
-    "pressure_gradient": (DPDX, DPDY),
 }
 
 SOLVER = {
