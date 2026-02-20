@@ -4,7 +4,6 @@ def view_mesh_pyvista(mesh_npz_path):
 
     data = np.load(mesh_npz_path, allow_pickle=True)
 
-    # Try common keys: "node" is typical for node coordinates
     node = data["node"]  # shape (Ni+1, Nj+1, 2)
 
     x = node[:, :, 0]

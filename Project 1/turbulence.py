@@ -98,24 +98,24 @@ def _apply_komega_wall(fields, mesh, boundary, index_range, nu, params):
     # - Enforce omega_min from params before applying.
     count_i = mesh["count_i"].item()
     count_j = mesh["count_j"].item()
-    interior, _ = bc._boundary_indices(boundary, index_range, count_i, count_j)
+
+    interior, ghost = bc._boundary_indices(boundary, index_range, count_i, count_j)
     _, _, s = bc._boundary_geometry(mesh, boundary, index_range)
+
     y = np.abs(s)
     y_safe = np.where(y > 1.0e-12, y, 1.0e-12)
 
-    omega_min = float(params["omega_min"])
-    Cw = float(params["omega_wall_coeff"])
+    # Calculate wall omega based on distance
+    omega_wall = params["omega_wall_coeff"] * nu / (y_safe ** 2)
+    omega_wall = np.maximum(omega_wall, params["omega_min"])
 
-    # omega_wall = Cw * ν / y^2
-    omega_wall = Cw * nu / (y_safe**2)
-    omega_wall = np.maximum(omega_wall, omega_min)
-
-    # set frist real cell next to the wall omega
+    # Overwrite the interior cell values adjacent to the wall
+    #fields["k"][interior] = params["k_min"]
     fields["omega"][interior] = omega_wall
 
-    # set ghost cell, omega_wall, k=0
+    # Apply standard Dirichlet mirroring to the ghost cells
+    bc.set_dirichlet(fields["k"], mesh, boundary, index_range, params["k_min"])
     bc.set_dirichlet(fields["omega"], mesh, boundary, index_range, omega_wall)
-    bc.set_dirichlet(fields["k"], mesh, boundary, index_range, 0.0)
 
 def apply_bcs(fields, mesh, bc_cfg, cfg, nu):
     """Apply turbulence BCs for the active model."""
@@ -189,48 +189,23 @@ def eddy_viscosity(fields, cfg):
     # - Enforce k_min and omega_min from _k_omega_defaults() before division.
     # - nu_t must be non-negative and stored in fields["nu_t"].
 
-    if "nu_t" not in fields:
-        raise ValueError("fields['nu_t'] is missing.")
-
-    # make nu_t everywhere for laminar
-    if (not cfg.get("enabled", False)) or (cfg.get("model") in (None, "none")):
+    if not cfg.get("enabled", False) or cfg.get("model") in (None, "none"):
         fields["nu_t"][:, :] = 0.0
         return fields["nu_t"]
 
-    # this is for turbulence
-    model = cfg.get("model")
-    if model not in ("k_omega",):
-        raise NotImplementedError(f"Unknown turbulence model: {model}")
-
-    if "k" not in fields or "omega" not in fields:
-        raise ValueError("fields['k'] and fields['omega'] are missing.")
-
-    # Get all the Params
     params = _k_omega_defaults()
-    k_min = float(params["k_min"])
-    omega_min = float(params["omega_min"])
+    k_min = params["k_min"]
+    omega_min = params["omega_min"]
+    nu_t_coeff = params["nu_t_coeff"]
 
-   # fields["k"][1:-1, 1:-1] = np.maximum(fields["k"][1:-1, 1:-1], 0.0)
-   # fields["omega"][1:-1, 1:-1] = np.maximum(fields["omega"][1:-1, 1:-1], omega_min)
+    k_safe = np.maximum(fields["k"], k_min)
+    omega_safe = np.maximum(fields["omega"], omega_min)
 
-    nu_t_coeff = float(params.get("nu_t_coeff", 1.0))
-    k = fields["k"]
-    omega = fields["omega"]
-    nu_t = fields["nu_t"]
+    fields["nu_t"][:, :] = nu_t_coeff * k_safe / omega_safe
+    return fields["nu_t"]
 
-    # make sure k and omega never goes negative or zero
-    k_safe = np.maximum(k, k_min)
-    omega_safe = np.maximum(omega, omega_min)
 
-    # nu_t = C * k / omega
-    nu_t[:, :] = nu_t_coeff * (k_safe / omega_safe)
-
-    # Enforce non-negative and finite
-    np.maximum(nu_t, 0.0, out=nu_t)
-    nu_t[~np.isfinite(nu_t)] = 0.0
-
-    return nu_t
-
+'''
 def sources(fields, grad_u, grad_v):
     """Compute turbulence source terms for the active model."""
     # Inputs:
@@ -245,42 +220,63 @@ def sources(fields, grad_u, grad_v):
     # - grad_u/grad_v are interior-only; outputs must be interior-only too.
     # - Use fields["nu_t"][1:-1, 1:-1] for production.
     # - Enforce k_min and omega_min from _k_omega_defaults() before division.
-    params= _k_omega_defaults()
-    alpha = float(params["alpha"])
-    beta = float(params["beta"])
-    beta_star = float(params["beta_star"])
-    k_min = float(params["k_min"])
-    omega_min = float(params["omega_min"])
+    params = _k_omega_defaults()
 
-    # getting rid of ghost cells
+    # Extract interior only
+    k = np.maximum(fields["k"][1:-1, 1:-1], params["k_min"])
+    omega = np.maximum(fields["omega"][1:-1, 1:-1], params["omega_min"])
     nu_t = fields["nu_t"][1:-1, 1:-1]
-    k = np.maximum(fields["k"][1:-1, 1:-1], k_min)
-    omega = np.maximum(fields["omega"][1:-1, 1:-1], omega_min)
 
-    du_dx = grad_u[:, :, 0]
-    du_dy = grad_u[:, :, 1]
-    dv_dx = grad_v[:, :, 0]
-    dv_dy = grad_v[:, :, 1]
+    ux = grad_u[..., 0]
+    uy = grad_u[..., 1]
+    vx = grad_v[..., 0]
+    vy = grad_v[..., 1]
 
-    # Strain-rate components
-    S11 = du_dx
-    S22 = dv_dy
-    S12 = 0.5 * (du_dy + dv_dx)
+    # Strain rate magnitude: 2 * S_ij * S_ij
+    # S_xx = ux, S_yy = vy, S_xy = S_yx = 0.5 * (uy + vx)
+    # 2 * S_ij * S_ij = 2*ux^2 + 2*vy^2 + (uy + vx)^2
+    S2 = 2.0 * ux ** 2 + 2.0 * vy ** 2 + (uy + vx) ** 2
+    P_k = nu_t * S2
 
-    # Invariant SijSij and production Pk = 2*nu_t*SijSij
-    SijSij = S11**2 + S22**2 + 2.0 * (S12**2)
-    Pk = 2.0 * nu_t * SijSij
-    Pk = np.maximum(Pk, 0.0)
+    alpha = params["alpha"]
+    beta = params["beta"]
+    beta_star = params["beta_star"]
 
-    # k equation source: Pk - beta* k*omega
-    source_k = Pk - beta_star * k * omega
+    # Source equations
+    source_k = P_k - beta_star * k * omega
+    # Numerically safe omega source
+    source_omega = alpha * S2 - beta * omega ** 2
 
-    # omega equation source: alpha*(omega/k)*Pk - beta*omega^2
-    source_omega = alpha * (omega / k) * Pk - beta * (omega**2)
+    return source_k, source_omega
+'''
 
-    # Defensive cleanup
-    source_k[~np.isfinite(source_k)] = 0.0
-    source_omega[~np.isfinite(source_omega)] = 0.0
+def sources(fields, grad_u, grad_v):
+    """Standard k-omega source terms with gamma (alpha) * (omega/k) * Pk. (Wilcox)"""
+    params = _k_omega_defaults()
+    k = np.maximum(fields["k"][1:-1, 1:-1], params["k_min"])
+    omega = np.maximum(fields["omega"][1:-1, 1:-1], params["omega_min"])
+    nu_t = fields["nu_t"][1:-1, 1:-1]
+    ux = grad_u[..., 0]
+    uy = grad_u[..., 1]
+    vx = grad_v[..., 0]
+    vy = grad_v[..., 1]
+    S2 = 2.0 * ux ** 2 + 2.0 * vy ** 2 + (uy + vx) ** 2
+    P_k = nu_t * S2
+    gamma = params["alpha"]
+    beta = params["beta"]
+    beta_star = params["beta_star"]
+
+    # --- K-EQUATION SOURCE ---
+    # Sk = Pk - beta_star * k * omega
+    source_k = P_k - beta_star * k * omega
+
+    # --- OMEGA-EQUATION SOURCE ---
+    # Sw = gamma * (omega / k) * Pk - beta * omega^2
+    term_prod_omega = gamma * (omega / k) * P_k
+    term_diss_omega = beta * (omega ** 2)
+
+    source_omega = term_prod_omega - term_diss_omega
+
     return source_k, source_omega
 
 def effective_diffusivity(nu, nu_t, field="k"):
@@ -298,17 +294,12 @@ def effective_diffusivity(nu, nu_t, field="k"):
     # - Returned array must be compatible with slicing [1:-1, 1:-1].
 
     params = _k_omega_defaults()
+
     if field == "k":
-        sigma = float(params["sigma_k"])
-    elif field in ("omega", "w"):
-        sigma = float(params["sigma_omega"])
+        sigma = params["sigma_k"]
+    elif field == "omega":
+        sigma = params["sigma_omega"]
     else:
-        raise ValueError(f"Unknown effective diffusivity field name{field}")
+        raise ValueError(f"Unsupported field '{field}' for effective_diffusivity.")
 
-    nu_eff = nu + (1/sigma)* nu_t
-
-    # guard-lines, nu_eff always > nu, get rid of Nan values
-    nu_eff = np.maximum(nu_eff, nu)
-    nu_eff[~np.isfinite(nu_eff)] = nu
-
-    return nu_eff
+    return nu + sigma * nu_t

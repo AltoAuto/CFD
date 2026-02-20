@@ -36,11 +36,11 @@ MESH = {
 # max step -> 100000
 # cfl_diff -> 0.2
 TIME = {
-    "cfl": 0.2,
-    "cfl_diff":0.2,
-    "dt_max": 5e-1,
+    "cfl": 0.5,
+    "cfl_diff":0.5,
+    "dt_max":0.1, #5e-1
     "dt_min": 0.0,
-    "max_steps":100000,
+    "max_steps":70000,
 }
 
 RESTART = {
@@ -48,14 +48,16 @@ RESTART = {
     "step": 1145,
 }
 
-DPDX = -1e-1
+#-------------------------
+# Re = 8158 -> DPDX = 0.04
+#-------------------------
+DPDX = -0.057
 DPDY = 0.0
 
 PHYSICS = {
     "nu": 1.5e-5, # kinematic viscosity
     "pressure_gradient": (DPDX, DPDY),
 }
-
 
 SOLVER = {
     "scheme": "simple",
@@ -71,9 +73,9 @@ SOLVER = {
     "simple": {
         "max_iter": 5,
         "continuity_tol": 1.0e-4,
-        "relax_u": 0.7,
-        "relax_v": 0.7,
-        "relax_p": 0.3,
+        "relax_u": 0.5,
+        "relax_v": 0.5,
+        "relax_p": 0.13,
     },
     "piso": {
         "n_correctors": 3,
@@ -133,14 +135,27 @@ BOUNDARY = {
     "pressure_reference": {"cell": (0, 0), "value": 0.0},
 }
 
-# INITIAL["scalars"] = {"k": 0.1, "omega": 0.1}
+# --- Turbulence Boundary Calculation ---
+nu = 1.5e-5
+Dh = 4.0 * HEIGHT
+Re_target = 1.0e4
+U_bulk = Re_target * nu / Dh
+
+I = 0.05    # turbulence intensity: Re -> 10^4
+L = 0.07 * Dh
+Cmu = 0.09
+k_val = 1.5 * (U_bulk * I)**2
+omega_val = np.sqrt(k_val) / (Cmu**0.25 * L)
+print(U_bulk, k_val, omega_val)
+#--------------------------------------
+
 INITIAL = {
-    "u": 10.0,
+    "u": U_bulk,
     "v": 0.0,
     "p": 0.0,
     "scalars": {
-        "k": 0.1,
-        "omega": 0.1,
+        "k": k_val,
+        "omega": omega_val
     },
 }
 
@@ -169,15 +184,14 @@ CONFIG = {
     "initial": INITIAL,
 }
 
-
 if __name__ == "__main__":
     for path in (MESH_DIR, STATES_DIR, POST_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
     mesh = make_mesh(MESH)
 
-    # view mesh through pyvista
-    view_mesh_pyvista(MESH["path"])
+    #view_mesh_pyvista(MESH["path"])    #view mesh through pyvista
+
     plot_mesh(MESH_PATH, line_width=0.6, dpi=140)
 
     # ramp initial condition
