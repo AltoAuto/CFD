@@ -52,3 +52,6 @@ print(f"  f_wall_end  = {f_wall_end:.6g}")
 print(f"  f_dpdx_end  = {f_dpdx_end:.6g}")
 print(f"  rel_diff    = {rel_diff:.6g}")
 print(f"  f_ref(Haaland, e/D={eD}) = {f_ref:.6g}")
+
+diff = (f_wall_end - f_ref)/f_ref
+print(f"  percent:{diff*100:.3g} | target = 5-10%")

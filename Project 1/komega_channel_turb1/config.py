@@ -8,6 +8,7 @@ import solver
 from mesh import generate_rect_mesh, make_mesh
 from post_processing import plot_mesh, plot_field, plot_convergence, plot_yplus, plot_line
 from visualization.vis_mesh import view_mesh_pyvista
+
 CASE_NAME = "komega_channel"
 
 CASE_DIR = Path(__file__).resolve().parent
@@ -22,6 +23,7 @@ HEIGHT = 0.05
 #-------------------------
 # Re = 8158 -> DPDX = 0.04
 #-------------------------
+
 DPDX = -0.057
 DPDY = 0
 nu = 1.5e-5
@@ -36,7 +38,7 @@ MESH = {
     "params": {
         "length_i": LENGTH,
         "length_j": HEIGHT,
-        "count_i": 5,
+        "count_i": 13,
         "count_j": 30,
         "ratio_i": 1.0,
         "ratio_j": 1.03,
@@ -51,7 +53,7 @@ TIME = {
     "cfl_diff":0.5,
     "dt_max":0.1,
     "dt_min": 0.0,
-    "max_steps":80000,
+    "max_steps":100000,
 }
 
 RESTART = {
@@ -190,7 +192,7 @@ if __name__ == "__main__":
 
     mesh = make_mesh(MESH)
 
-    #view_mesh_pyvista(MESH["path"])    #view mesh through pyvista
+    view_mesh_pyvista(MESH["path"])    #view mesh through pyvista
 
     plot_mesh(MESH_PATH, line_width=0.6, dpi=140)
 
