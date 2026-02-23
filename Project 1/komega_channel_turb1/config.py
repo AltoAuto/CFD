@@ -38,7 +38,7 @@ MESH = {
     "params": {
         "length_i": LENGTH,
         "length_j": HEIGHT,
-        "count_i": 13,
+        "count_i": 10,
         "count_j": 30,
         "ratio_i": 1.0,
         "ratio_j": 1.03,
