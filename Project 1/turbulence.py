@@ -241,12 +241,11 @@ def sources(fields, grad_u, grad_v):
     # Sk = Pk - beta_star * k * omega
     source_k = P_k - beta_star * k * omega
 
-
-    # --- OMEGA-EQUATION SOURCE ---
+    # --- OMEGA-EQUATION SOURCE (From lecture slide)---
     # Sw = gamma * (omega / k) * Pk - beta * omega^2
     #source_omega = gamma * (omega / k) * P_k - beta * (omega ** 2)
 
-    # --- OMEGA-EQUATION SOURCE (Stable Form) ---
+    # --- OMEGA-EQUATION SOURCE (Recommended by Chat) ---
     # Sw = gamma * S^2 - beta * omega^2
     source_omega = gamma * S2 - beta * (omega ** 2)
 
