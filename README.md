@@ -240,3 +240,9 @@ Keep the interfaces consistent so cases remain plug-and-play.
    - Continuity L2 and momentum L2 are logged each outer step.
 
 This loop repeats until reaching `max_steps`.
+
+## Credits & Acknowledgments
+This project was developed at the **University of Minnesota**.
+
+* **Core Solver & Post-Processing Architecture:** Provided by the UMN Department of Mechanical Engineering.
+* **Implementation of turbulence Logic:** Developed by Aiden Wang.
