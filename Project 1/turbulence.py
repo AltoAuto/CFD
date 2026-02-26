@@ -1,12 +1,5 @@
 import numpy as np
-
 import bc
-
-# Model requirements:
-# - k-omega needs k and omega fields, plus nu_t derived from them.
-# - Boundary conditions for k and omega are required at inlets (Dirichlet).
-# - Outlet/wall/symmetry default to zero normal gradient (resolved wall).
-
 
 def _k_omega_defaults():
     """
@@ -245,7 +238,7 @@ def sources(fields, grad_u, grad_v):
     # Sw = gamma * (omega / k) * Pk - beta * omega^2
     #source_omega = gamma * (omega / k) * P_k - beta * (omega ** 2)
 
-    # --- OMEGA-EQUATION SOURCE (Recommended by Chat) ---
+    # --- OMEGA-EQUATION SOURCE (More stable) ---
     # Sw = gamma * S^2 - beta * omega^2
     source_omega = gamma * S2 - beta * (omega ** 2)
 
