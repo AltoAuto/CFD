@@ -9,7 +9,7 @@ from mesh import generate_rect_mesh, make_mesh
 from post_processing import plot_mesh, plot_field, plot_convergence, plot_yplus, plot_line
 from visualization.vis_mesh import view_mesh_pyvista
 
-CASE_NAME = "komega_channel"
+CASE_NAME = "Medium_mesh"
 
 CASE_DIR = Path(__file__).resolve().parent
 MESH_DIR = CASE_DIR / "mesh"
@@ -38,8 +38,8 @@ MESH = {
     "params": {
         "length_i": LENGTH,
         "length_j": HEIGHT,
-        "count_i": 15,
-        "count_j": 40,
+        "count_i": 10,
+        "count_j": 30,
         "ratio_i": 1.0,
         "ratio_j": 1.03,
     },
@@ -49,13 +49,12 @@ MESH = {
 # max step -> 100000
 # cfl_diff -> 0.2
 TIME = {
-    "cfl": 0.1,
-    "cfl_diff":0.1,
-    "dt_max":0.001,
+    "cfl": 0.5,
+    "cfl_diff":0.5,
+    "dt_max":0.1,
     "dt_min": 0.0,
-    "max_steps":350000,
+    "max_steps":100000,
 }
-
 RESTART = {
     "enabled": False,
     "step": 1145,

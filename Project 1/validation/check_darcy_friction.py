@@ -1,7 +1,7 @@
 import numpy as np
 from pathlib import Path
 
-LOG = Path(r"C:\Users\altoa\Desktop\CHT\Project\Project 1\CFD\Runs\Fine_mesh\postproc\komega_channel_friction_log.txt")
+LOG = Path(r"C:\Users\altoa\Desktop\CHT\Project\Project 1\CFD\Runs\Medium_mesh\postproc\komega_channel_friction_log.txt")
 
 def f_darcy_haaland(Re, eD=0.0):
     """Darcy friction factor using Haaland; smooth if eD=0."""
