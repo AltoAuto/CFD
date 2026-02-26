@@ -1,7 +1,9 @@
 import numpy as np
+global r_mid
 
 def calculate_mesh(height, nu, Re_target, target_yplus=0.8, max_ratio=1.12, cfl_target=0.5):
     """Deterministically calculates mesh and time parameters for wall-resolved CFD."""
+
     Dh = 4.0 * height
     U_bulk = (Re_target * nu) / Dh
 
@@ -30,11 +32,10 @@ def calculate_mesh(height, nu, Re_target, target_yplus=0.8, max_ratio=1.12, cfl_
         else:
             r_low = r_mid
 
-    ratio_j = r_mid
     dt_max = (cfl_target * dy1) / U_bulk
 
     return {
         "count_j": count_j,
-        "ratio_j": round(ratio_j, 5),
+        "ratio_j": round(r_mid, 5),
         "dt_max": round(dt_max, 6)
     }
